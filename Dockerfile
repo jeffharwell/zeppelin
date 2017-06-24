@@ -31,3 +31,20 @@ RUN wget http://apache.mirrors.tds.net/zeppelin/zeppelin-0.7.2/zeppelin-0.7.2-bi
     rm -fr /run_backup && \
     rm ./zeppelin-0.7.2-bin-all.tgz && \
     rm -rf /tmp/* /var/tmp/*
+RUN wget http://www.trieuvan.com/apache/spark/spark-1.6.3/spark-1.6.3-bin-hadoop2.6.tgz && \
+    tar -xvf ./spark-1.6.3-bin-hadoop2.6.tgz && \
+    mkdir /config_backup && \
+    cp /opt/spark/conf/* /config_backup && \
+    cp /opt/spark/lib/gcs-connector-latest-hadoop2.jar /config_backup && \
+    rm -fr /opt/spark-1.5.2-bin-hadoop2.6 && \
+    rm /opt/spark && \
+    mv ./spark-1.6.3-bin-hadoop2.6 /opt/ && \
+    ln -s /opt/spark-1.6.3-bin-hadoop2.6 /opt/spark && \
+    cp /config_backup/core-site.xml /opt/spark/conf && \
+    cp /config_backup/log4j.properties /opt/spark/conf && \
+    cp /config_backup/spark-defaults.conf /opt/spark/conf && \
+    cp /config_backup/gcs-connector-latest-hadoop2.jar /opt/spark/lib && \
+    rm -fr /config_backup && \
+    rm ./spark-1.6.3-bin-hadoop2.6.tgz
+
+
