@@ -3,34 +3,31 @@ MAINTAINER Jeff Harwell <jeff.harwell@gmail.com>
 
 ## This is, of course, non-ideal.
 ## If I had the dockerfile for the GCR image I would do this differently
-RUN apt-get -y update
-RUN apt-get -y upgrade
+RUN apt-get -y update && \
+    apt-get -y upgrade && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
 
-#RUN wget https://github.com/grails/grails-core/releases/download/v${GRAILS_VERSION}/grails-${GRAILS_VERSION}.zip && \
-#    unzip grails-${GRAILS_VERSION}.zip && \
-#    rm -rf grails-${GRAILS_VERSION}.zip && \
-#    ln -s grails-${GRAILS_VERSION} grails
-
-## Grab and unpack Zeppelin
+## Get the new version of Zeppelin
+## untar it
+## back up the GCR config
+## delete the old version
+## install the new version
+## copy the config into the new version
+## cleanup
 RUN wget http://apache.mirrors.tds.net/zeppelin/zeppelin-0.7.2/zeppelin-0.7.2-bin-all.tgz && \
-    tar -xvf ./zeppelin-0.7.2-bin-all.tgz
-
-## Snag the original Zeppelin config, install the new version, then copy the config back in
-RUN mkdir /config_backup && \
-    cp /opt/zeppelin/conf/* /config_backup
-RUN mkdir /run_backup && \
-    cp /opt/zeppelin/bin/* /run_backup
-RUN rm -fr /opt/zeppelin
-RUN mv ./zeppelin-0.7.2-bin-all /opt/zeppelin
-RUN ls /config_backup/
-RUN cp /config_backup/zeppelin-env.sh /opt/zeppelin/conf/
-RUN cp /config_backup/log4j.properties /opt/zeppelin/conf/
-RUN cp /run_backup/docker-zeppelin.sh /opt/zeppelin/bin/
-
-## Cleanup
-RUN rm -fr /config_backup
-RUN rm -fr /run_backup
-RUN rm ./zeppelin-0.7.2-bin-all.tgz
-
-## And Clean the Cache
-RUN apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
+    tar -xvf ./zeppelin-0.7.2-bin-all.tgz && \
+    mkdir /config_backup && \
+    cp /opt/zeppelin/conf/* /config_backup && \
+    mkdir /run_backup && \
+    cp /opt/zeppelin/bin/* /run_backup && \
+    rm -fr /opt/zeppelin && \
+    mv ./zeppelin-0.7.2-bin-all /opt/zeppelin && \
+    ls /config_backup/ && \
+    cp /config_backup/zeppelin-env.sh /opt/zeppelin/conf/ && \
+    cp /config_backup/log4j.properties /opt/zeppelin/conf/ && \
+    cp /run_backup/docker-zeppelin.sh /opt/zeppelin/bin/ && \
+    rm -fr /config_backup && \
+    rm -fr /run_backup && \
+    rm ./zeppelin-0.7.2-bin-all.tgz && \
+    rm -rf /tmp/* /var/tmp/*
