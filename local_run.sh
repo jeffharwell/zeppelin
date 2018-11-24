@@ -8,4 +8,6 @@
 # have everything set up that way in Kubernetics
 #
 
-docker run -p 8080:8080 --rm --name zeppelin jeffharwell/zeppelin:v0.7.2_v1
+VERSION=v0.8.0_v1
+
+docker run -p 8080:8080 --rm --name zeppelin jeffharwell/zeppelin:${VERSION}

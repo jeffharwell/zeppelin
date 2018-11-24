@@ -5,4 +5,4 @@ if [ 'root' != `whoami` ]; then
     exit 1
 fi
 
-docker build -t jeffharwell/zeppelin:v0.7.2_v1 .
+docker build -t jeffharwell/zeppelin:v0.8.0_v1 .
